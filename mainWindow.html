@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Chatroom</title>
+    <link rel="stylesheet" href="css/style-home.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA==" crossorigin="anonymous" />
+</head>
+
+<body>
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-app.js"></script>
+
+    <!-- database -->
+    <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-database.js"></script>
+    <!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#available-libraries -->
+    <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-analytics.js"></script>
+
+    <script>
+        // Your web app's Firebase configuration
+        // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+        var firebaseConfig = {
+            apiKey: "AIzaSyDQPGTU8YgKxm_hTH5pgSGaFydQPVBL7GQ",
+            authDomain: "chatwindow-c2e06.firebaseapp.com",
+            projectId: "chatwindow-c2e06",
+            storageBucket: "chatwindow-c2e06.appspot.com",
+            messagingSenderId: "678924099396",
+            appId: "1:678924099396:web:ffbddce7980b693ec68111",
+            measurementId: "G-2Z9ZS1DVVR"
+        };
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        firebase.analytics();
+
+        var namel = document.getElementById("namel").value;
+        var message = document.getElementById("Message").value;
+
+        function send() {
+            firebase.database().ref("message").push().set({
+                "sender": namel,
+                "message": message,
+            });
+            return false;
+        }
+        firebase.database().ref("message").on("child_added", function(snapshot) {
+            var html = "";
+            html += "<li>";
+            html += "<h2 style='margin-left:20px;'><i class='far fa-comment-alt'></i></h2>" + "<h2 style='margin-left:20px;'>" + snapshot.val().friend + ":" + snapshot.val().message + "</h2>";
+            html += "</li>";
+
+            document.getElementById("messagesli").innerHTML += html;
+        });
+        // <i class='far fa-comment-alt'></i>
+    </script>
+    <header>
+        <h2 class="h2-1" style="margin-left: 50px;"><i class="far fa-comment-alt"></i></h2>
+        <h2 class="h2-1">Chatroom</h2>
+    </header>
+    <div class="container">
+        <ul id="messagesli">
+        </ul>
+    </div>
+    <div class="cont">
+        <form onsubmit="return send();">
+            <input type="text" class="input-control" placeholder="Your name" id="namel">
+            <input type="text" class="input-control" placeholder="Message" id="Message"> <input type="submit" class="submit">
+        </form>
+    </div>
+</body>
+
+</html>
